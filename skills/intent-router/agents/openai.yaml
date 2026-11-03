@@ -1,12 +1,7 @@
 interface:
-  display_name: "My Skill"
-  short_description: "Skill 功能简介"
-  default_prompt: "使用该 Skill 完成指定任务"
+  display_name: "研发意图路由"
+  short_description: "识别研发意图并路由专项 Skills"
+  default_prompt: "分析当前研发请求的主要意图和复杂度，选择一个主 Skill，并仅在必要时建议辅助 Skill。"
 
-dependencies:
-  tools:
-    - type: "mcp"
-      value: "openaiDeveloperDocs"
-      description: "OpenAI Docs MCP server"
-      transport: "streamable_http"
-      url: "https://developers.openai.com/mcp"
+policy:
+  allow_implicit_invocation: false

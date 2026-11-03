@@ -1,0 +1,41 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ai-rd-assistant",
+  "version": "1.2.0",
+  "description": "面向真实软件项目的统一 AI 研发助手，采用单主 Agent、低 Token 按需编排和多 Skills 协作。",
+  "author": {
+    "name": "AI 研发助手项目"
+  },
+  "homepage": "https://github.com/lksharing0208/ai-rd-assistant",
+  "repository": "https://github.com/lksharing0208/ai-rd-assistant",
+  "keywords": [
+    "software-development",
+    "engineering",
+    "agent",
+    "agent-skills",
+    "code-review",
+    "testing",
+    "low-token"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "AI 研发助手",
+        "shortDescription": "低 Token 研发全流程助手",
+        "longDescription": "一个统一主控 Agent，负责识别研发意图、选择主 Skill、按需加载辅助 Skills，并基于真实项目材料完成需求分析、源码理解、架构设计、API 与数据库设计、代码实现、重构、审查、测试和交付。",
+        "developerName": "AI 研发助手项目",
+        "category": "Productivity",
+        "capabilities": [
+          "Code",
+          "Research",
+          "Writing"
+        ],
+        "defaultPrompt": [
+          "作为 AI 研发助手处理我的研发任务，默认使用低 Token 模式，识别意图后只加载必要的 Skills。",
+          "请基于我提供的真实项目源码和项目规范完成代码实现、必要测试与变更审查。",
+          "帮我完成生产级研发任务，按需执行需求、设计、实现、测试、Review 和交付，不要强制执行无关阶段。"
+        ]
+      }
+    }
+  }
+}

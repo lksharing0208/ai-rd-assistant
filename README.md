@@ -584,3 +584,34 @@ python scripts/validate_skills.py
 详细规范见：
 - `docs/LOW-TOKEN-ORCHESTRATION.md`
 - `docs/SKILL-GENERATION-RULES.md`
+
+---
+
+## 14. ChatGPT Plugin Adapter（单一插件 + 单主 Agent + 多 Skills）
+
+本项目通过 `adapters/chatgpt/` 将统一 Agent 源配置转换为 ChatGPT 可识别的单一插件包。插件显示名称固定为 **AI 研发助手**，主控工作流为 `ai-rd-workflow`，其余 `skills/*` 均作为同一插件内的专项能力，不分别创建插件。
+
+### 14.1 核心文件
+
+- `adapters/chatgpt/plugin.json`：插件身份、版本、展示名称和默认提示词模板。
+- `adapters/chatgpt/agents/openai.yaml`：ChatGPT Agent 展示信息、默认提示词和隐式调用策略。
+- `skills/ai-rd-workflow/SKILL.md`：唯一主控 Agent 工作流。
+- `skills/<name>/SKILL.md`：专项 Skills。
+- `scripts/validate_chatgpt_plugin.py`：插件 Adapter 校验。
+- `scripts/build_chatgpt_plugin.py`：生成单一 ChatGPT 插件 ZIP。
+
+### 14.2 构建命令
+
+在仓库根目录执行：
+
+```bash
+python scripts/validate_skills.py
+python scripts/validate_chatgpt_plugin.py
+python scripts/build_chatgpt_plugin.py
+```
+
+默认输出：`dist/ai-rd-assistant-chatgpt-v1.2.0.zip`。
+
+ZIP 根目录必须直接包含 `plugin.json`、`agents/openai.yaml` 和 `skills/`，不得只压缩单个 Skill 目录。构建时会将统一 Agent 源配置复制到主控 Skill 的 `references/`，确保包内引用完整。
+
+详细说明见 `docs/CHATGPT-PLUGIN-ADAPTER.md` 和 `adapters/chatgpt/README.md`。

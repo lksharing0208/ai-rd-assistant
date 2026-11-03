@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI 研发助手"
+  short_description: "低 Token 研发全流程助手"
+  default_prompt: "作为统一主控 Agent 处理研发任务：先识别意图，再按需加载一个主 Skill 和必要辅助 Skills；优先读取真实项目材料，遵守项目规范，完成必要验证并准确交付。"
+
+policy:
+  allow_implicit_invocation: true
