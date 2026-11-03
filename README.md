@@ -2,28 +2,36 @@
 AI研发助手
 
 
+# AI Skill 标准目录结构规范
 
-skills/
-├── intent-router/
-│   ├── SKILL.md
-│   ├── scripts/
-│   ├── references/
-│   ├── assets/
-│   └── agents/
-│       ├── openai.yaml
-│       └── claude.yaml
-│
-├── requirement-analysis/
-│   └── SKILL.md
-│
-├── architecture-design/
-│   └── SKILL.md
-│
-├── code-implementation/
-│   └── SKILL.md
-│
-├── code-review/
-│   └── SKILL.md
-│
-└── test-design/
-    └── SKILL.md
+**文档名称：** AI Skill 标准目录结构规范  
+**文档版本：** v1.0  
+**适用范围：** ChatGPT、Claude、Gemini、DeepSeek、Qwen 等 AI 平台  
+**文档类型：** 技术规范
+
+---
+
+## 1. 设计目标
+
+建立统一、标准化、可复用的 Skill 目录结构，支持不同 AI 模型和 Agent 平台共享核心 Skill 能力。
+
+设计目标：
+
+1. 统一 Skill 文件组织结构。
+2. 统一 Skill 元数据和指令规范。
+3. 支持独立 Skill，相互引用和组合调用。
+4. 支持脚本执行和自动化任务。
+5. 支持参考文档和资源文件管理。
+6. 支持不同 AI 平台的配置适配。
+7. 支持 Skill 的独立开发、测试、维护和版本管理。
+8. 支持跨模型迁移和复用。
+
+核心原则：
+
+**核心指令统一、业务能力独立、资源按需加载、平台配置隔离。**
+
+---
+
+## 2. 标准目录结构
+
+### 2.1
