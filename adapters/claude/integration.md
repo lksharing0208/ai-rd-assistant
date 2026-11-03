@@ -30,3 +30,6 @@
 
 ## 注意
 此文件是适配说明，不是 Claude Code 可直接加载的 Subagent 文件。
+
+## 打包与导入
+Skills 的 ZIP 打包（claude.ai 导入）和 `.claude/skills` 安装由 `scripts/build_claude_skills.py` 完成，步骤见 `adapters/claude/README.md`。
