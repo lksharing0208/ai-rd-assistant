@@ -78,6 +78,20 @@ def zip_skill(folder: Path, output: Path) -> None:
             raise RuntimeError(f"ZIP must contain only the '{folder.name}/' root folder")
 
 
+def write_project_instructions(out: Path, names: list[str]) -> None:
+    """claude.ai 没有 Agent 概念：把主 Agent 指令转成 Project Custom Instructions。"""
+    body = (ROOT / "agent" / "instructions.md").read_text(encoding="utf-8").split("\n", 1)[1].strip()
+    text = (
+        "# AI 研发助手（Project Instructions）\n\n"
+        "在 claude.ai Project 的 Instructions 中粘贴本文件全文。\n\n"
+        + body
+        + "\n\n## Skills 使用\n"
+        "已启用的 Skills：" + "、".join(names) + "。\n"
+        "研发任务先使用 ai-rd-workflow 判断任务等级和主 Skill；Skills 之间相互独立，按需调用，不全部加载。\n"
+    )
+    (out / "PROJECT-INSTRUCTIONS.md").write_text(text, encoding="utf-8")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--layout", choices=["zip", "project"], default="zip")
@@ -107,7 +121,8 @@ def main() -> int:
             with tempfile.TemporaryDirectory(prefix="claude-skills-") as tmp:
                 for d in skills:
                     zip_skill(stage_skill(d, Path(tmp)), out / f"{d.name}.zip")
-            print(f"Built {len(skills)} ZIPs in {out}")
+            write_project_instructions(out, [d.name for d in skills])
+            print(f"Built {len(skills)} ZIPs + PROJECT-INSTRUCTIONS.md in {out}")
     except (OSError, RuntimeError) as exc:
         print(f"Build failed: {exc}", file=sys.stderr)
         return 1

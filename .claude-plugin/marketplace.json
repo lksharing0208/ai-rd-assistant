@@ -1,0 +1,14 @@
+{
+  "name": "ai-rd-assistant",
+  "owner": {
+    "name": "AI 研发助手项目"
+  },
+  "plugins": [
+    {
+      "name": "ai-rd-assistant",
+      "source": "./",
+      "description": "面向真实软件项目的低 Token 研发助手：单主 Agent + 12 个专项 Skills，按需编排。",
+      "version": "1.2.0"
+    }
+  ]
+}

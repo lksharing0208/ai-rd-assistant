@@ -1,0 +1,17 @@
+{
+  "name": "ai-rd-assistant",
+  "version": "1.2.0",
+  "description": "面向真实软件项目的低 Token 研发助手：单主 Agent + 12 个专项 Skills，按需编排。",
+  "author": {
+    "name": "AI 研发助手项目"
+  },
+  "homepage": "https://github.com/lksharing0208/ai-rd-assistant",
+  "repository": "https://github.com/lksharing0208/ai-rd-assistant",
+  "keywords": [
+    "software-development",
+    "agent",
+    "skills",
+    "code-review",
+    "low-token"
+  ]
+}
