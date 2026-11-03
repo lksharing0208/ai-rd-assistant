@@ -1,7 +1,6 @@
 # ai-rd-assistant
 AI研发助手
 
-
 # AI Skill 标准目录结构规范
 
 **文档名称：** AI Skill 标准目录结构规范  
@@ -34,4 +33,435 @@ AI研发助手
 
 ## 2. 标准目录结构
 
-### 2.1
+### 2.1 基础目录结构
+
+```text
+my-skill/
+├── SKILL.md                  # 必须：Skill 主定义文件
+├── scripts/                  # 可选：可执行脚本
+│   ├── validate.py
+│   └── execute.sh
+├── references/               # 可选：参考文档
+│   ├── architecture.md
+│   └── development-guide.md
+├── assets/                   # 可选：模板和静态资源
+│   ├── templates/
+│   └── examples/
+└── agents/                   # 可选：平台专属配置
+    └── openai.yaml
+```
+
+### 2.2 目录定义
+
+| 目录/文件 | 是否必须 | 主要职责 |
+|---|---|---|
+| `SKILL.md` | 必须 | Skill 元数据、能力定义、执行指令 |
+| `scripts/` | 可选 | 自动化脚本、数据处理、校验程序 |
+| `references/` | 可选 | 技术规范、业务文档、知识资料 |
+| `assets/` | 可选 | 模板、配置样例、静态资源 |
+| `agents/` | 可选 | AI 平台专属配置 |
+| `agents/openai.yaml` | 可选 | OpenAI 平台展示信息及依赖配置 |
+
+---
+
+## 3. SKILL.md 文件规范
+
+### 3.1 文件职责
+
+`SKILL.md` 是 Skill 的核心定义文件，负责：
+
+- 定义 Skill 身份和能力。
+- 声明 Skill 触发条件。
+- 定义输入和输出。
+- 约束执行流程。
+- 定义业务规则。
+- 引用其他 Skill 和参考资料。
+- 规定异常处理机制。
+
+### 3.2 标准文件结构
+
+```markdown
+---
+name: my-skill
+description: >
+  Skill 功能描述。
+  明确适用场景、触发条件和核心能力。
+---
+
+# My Skill
+
+## 1. 角色定位
+
+定义当前 Skill 的职责和能力边界。
+
+## 2. 触发条件
+
+定义什么情况下需要调用当前 Skill。
+
+## 3. 输入要求
+
+定义执行任务所需的输入信息。
+
+## 4. 执行流程
+
+定义标准执行步骤。
+
+## 5. 执行规范
+
+定义执行过程中的业务规则和技术约束。
+
+## 6. 输出要求
+
+定义最终交付内容及格式。
+
+## 7. 异常处理
+
+定义输入缺失、执行失败和异常情况的处理方式。
+
+## 8. Skill 引用
+
+定义需要协作调用的其他 Skill。
+
+## 9. 参考资料
+
+引用 references/ 中的相关文档。
+```
+
+### 3.3 元数据规范
+
+| 字段 | 必须 | 说明 |
+|---|---|---|
+| `name` | 是 | Skill 唯一名称 |
+| `description` | 是 | Skill 功能及触发条件描述 |
+
+命名规则：
+
+- 使用小写英文。
+- 单词之间使用 `-`。
+- 名称具有明确业务含义。
+- 同一 Skill 体系内不得重复。
+
+示例：
+
+```yaml
+---
+name: intent-router
+description: >
+  负责识别用户意图、判断任务类型、
+  选择对应角色和 Skill 执行链路。
+---
+```
+
+---
+
+## 4. scripts 目录规范
+
+### 4.1 目录职责
+
+`scripts/` 用于存放 Skill 执行过程中需要调用的程序。
+
+适用场景：
+
+- 文件处理。
+- 数据转换。
+- 数据校验。
+- 自动化执行。
+- API 调用。
+- 代码分析。
+- 测试执行。
+
+### 4.2 目录结构
+
+```text
+scripts/
+├── validate.py
+├── execute.py
+├── parser.py
+└── utils.py
+```
+
+### 4.3 开发规范
+
+1. 脚本应具有明确的功能边界。
+2. 避免将大量业务规则直接写入脚本。
+3. 支持必要的参数输入。
+4. 统一异常处理。
+5. 明确执行结果和错误信息。
+6. 不得在脚本中硬编码密码、Token 等敏感信息。
+7. 必须在 SKILL.md 中说明脚本用途和调用方式。
+
+---
+
+## 5. references 目录规范
+
+### 5.1 目录职责
+
+`references/` 用于存放 Skill 执行所需的知识文档和规范资料。
+
+适用场景：
+
+- 技术架构说明。
+- 业务规则。
+- 开发规范。
+- API 文档。
+- 数据库规范。
+- 设计标准。
+- 操作手册。
+
+### 5.2 目录结构
+
+```text
+references/
+├── architecture.md
+├── development-guide.md
+├── business-rules.md
+├── api-reference.md
+└── examples.md
+```
+
+### 5.3 引用规范
+
+在 `SKILL.md` 中使用相对路径引用：
+
+```markdown
+## 参考资料
+
+执行任务前，根据实际需要读取：
+
+- `references/architecture.md`
+- `references/development-guide.md`
+- `references/business-rules.md`
+```
+
+规范要求：
+
+1. 参考资料与 Skill 核心指令分离。
+2. 避免重复维护相同内容。
+3. 使用相对路径。
+4. 按任务需要加载资料。
+5. 保持文档内容与 Skill 版本一致。
+
+---
+
+## 6. assets 目录规范
+
+### 6.1 目录职责
+
+`assets/` 用于存放 Skill 执行过程中需要使用的静态资源。
+
+### 6.2 目录结构
+
+```text
+assets/
+├── templates/
+│   ├── requirement-template.md
+│   └── report-template.md
+├── examples/
+│   ├── input-example.json
+│   └── output-example.json
+└── config/
+    └── default-config.yaml
+```
+
+### 6.3 使用规范
+
+- 模板文件与执行逻辑分离。
+- 示例文件用于输入输出参考。
+- 配置文件不得包含敏感信息。
+- 静态资源使用相对路径引用。
+
+---
+
+## 7. agents 目录规范
+
+### 7.1 目录职责
+
+`agents/` 用于存放特定 AI 平台所需的适配配置。
+
+核心原则：
+
+**Skill 核心能力不依赖特定模型，平台差异通过适配配置处理。**
+
+### 7.2 目录结构
+
+```text
+agents/
+├── openai.yaml
+├── claude.yaml
+├── gemini.yaml
+└── deepseek.yaml
+```
+
+以上文件仅作为跨平台扩展设计示例，不代表所有平台均原生支持这些配置文件。
+
+### 7.3 OpenAI 配置示例
+
+```yaml
+interface:
+  display_name: "My Skill"
+  short_description: "Skill 功能简介"
+  default_prompt: "使用当前 Skill 完成指定任务"
+
+dependencies:
+  tools: []
+```
+
+注意：
+
+`agents/openai.yaml` 属于平台适配配置，不替代 `SKILL.md`，具体字段以目标平台的实际规范为准。
+
+---
+
+## 8. Skill 之间的引用规范
+
+### 8.1 设计原则
+
+多个 Skill 可以通过明确的调用规则组成完整工作流。
+
+例如：
+
+```text
+intent-router
+      |
+      v
+requirement-analysis
+      |
+      v
+architecture-design
+      |
+      v
+code-implementation
+      |
+      v
+code-review
+      |
+      v
+test-design
+```
+
+### 8.2 引用方式
+
+在 Skill 的 `SKILL.md` 中声明协作关系：
+
+```markdown
+## Skill 协作
+
+根据任务类型调用以下 Skill：
+
+- intent-router：负责用户意图识别。
+- requirement-analysis：负责需求分析。
+- architecture-design：负责架构设计。
+- code-implementation：负责代码实现。
+- code-review：负责代码审查。
+- test-design：负责测试设计。
+
+调用约束：
+
+1. 仅调用与当前任务相关的 Skill。
+2. 不重复执行已经完成的工作。
+3. 明确上下游输入输出。
+4. 共享必要的任务上下文。
+5. 避免循环引用。
+6. 当前 Skill 无法完成的任务交由对应 Skill 处理。
+```
+
+注意：文件中声明引用关系不等于自动执行。实际调用需要由 Agent、平台编排器或运行环境负责。
+
+---
+
+## 9. 完整 Skill 项目结构
+
+推荐采用以下结构组织大型 Skill 项目：
+
+```text
+skills/
+│
+├── intent-router/
+│   ├── SKILL.md
+│   ├── scripts/
+│   │   └── intent-classifier.py
+│   ├── references/
+│   │   └── intent-rules.md
+│   ├── assets/
+│   │   └── intent-mapping.yaml
+│   └── agents/
+│       └── openai.yaml
+│
+├── requirement-analysis/
+│   ├── SKILL.md
+│   ├── references/
+│   │   └── requirement-template.md
+│   └── assets/
+│       └── requirement-template.md
+│
+├── architecture-design/
+│   ├── SKILL.md
+│   ├── references/
+│   │   └── architecture-standard.md
+│   └── assets/
+│       └── architecture-template.md
+│
+├── code-implementation/
+│   ├── SKILL.md
+│   ├── scripts/
+│   │   └── code-validator.py
+│   └── references/
+│       └── development-guide.md
+│
+├── code-review/
+│   ├── SKILL.md
+│   └── references/
+│       └── review-checklist.md
+│
+└── test-design/
+    ├── SKILL.md
+    └── references/
+        └── test-standard.md
+```
+
+---
+
+## 10. 跨模型兼容规范
+
+### 10.1 文件兼容性
+
+| 文件类型 | ChatGPT | Claude | 统一设计建议 |
+|---|---|---|---|
+| SKILL.md | 支持对应 Skill 规范 | 支持对应 Skill 规范 | 统一核心内容 |
+| scripts/ | 取决于执行环境 | 取决于执行环境 | 统一脚本 |
+| references/ | 支持按需读取 | 支持按需读取 | 统一文档 |
+| assets/ | 取决于平台加载能力 | 取决于平台加载能力 | 统一资源 |
+| agents/openai.yaml | OpenAI 专属配置 | 不通用 | 平台隔离 |
+
+### 10.2 统一设计方案
+
+采用：
+
+```text
+统一 Skill 核心规范
+        |
+        v
+    SKILL.md
+        |
+        +----------------+
+        |                |
+        v                v
+    scripts/         references/
+        |                |
+        +-------+--------+
+                |
+                v
+          assets/
+                |
+                v
+        平台适配配置
+                |
+       +--------+--------+
+       |        |        |
+       v        v        v
+    ChatGPT  Claude   Gemini
+```
+
+设计要求：
+
+1. 业务规则
