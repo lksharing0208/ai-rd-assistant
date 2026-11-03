@@ -524,3 +524,63 @@ skills/
 10. 平台差异由适配层处理。
 
 **最终采用：一套 Skill 核心规范 + 多平台适配配置 + Agent 统一调度的架构。**
+
+
+---
+
+## 13. AI 研发助手 Agent 与低 Token 编排
+
+本项目使用统一主 Agent + Intent Router + 专项 Skills 组织研发能力。默认启用低 Token 模式：先识别意图，再加载一个主 Skill；只有任务需要时才加载辅助 Skill、references 和模板。
+
+### 13.1 统一 Agent 源文件
+- `agent/manifest.yaml`：任务等级、路由策略、上下文和安全策略。
+- `agent/instructions.md`：模型无关的主 Agent 指令。
+- `config/skill-routing.yaml`：意图到主/辅助 Skill 的映射。
+
+### 13.2 任务等级
+| 等级 | 任务 | 默认编排 |
+|---|---|---|
+| S0 | 简单问答 | 直接回答，不加载专项 Skill |
+| S1 | 单一研发任务 | 1 个主 Skill |
+| S2 | 跨模块/需要验证 | 1 个主 Skill + 必要辅助，通常不超过 3 个 |
+| S3 | 全链路/高风险任务 | 分阶段按需加载，阶段间传递短摘要 |
+
+### 13.3 Skills 路由
+| 任务 | 主 Skill |
+|---|---|
+| 意图识别 | intent-router |
+| 需求分析 | requirement-analysis |
+| 项目源码理解 | project-analysis |
+| 架构设计 | architecture-design |
+| API 设计 | api-design |
+| 数据库设计 | database-design |
+| 代码实现 | code-implementation |
+| 代码重构 | code-refactoring |
+| 代码审查 | code-review |
+| 测试设计 | test-design |
+| 文档/Git 交付 | project-delivery |
+
+### 13.4 低 Token 约束
+1. 不预加载全部 Skills、references 或整个仓库。
+2. 先按意图选一个主 Skill，再按依赖加载辅助 Skill。
+3. 标准任务通常最多加载 3 个 Skills。
+4. 优先按路径、符号、Diff 和短摘要读取上下文。
+5. 同一文件、查询和分析结果不得无故重复处理。
+6. 复杂任务分阶段执行，只传递 facts、files、decisions、risks、pending 等短摘要。
+7. Token 优化不能跳过必要的测试、安全检查、项目规范或用户要求。
+
+### 13.5 平台适配
+统一能力定义放在 `agent/` 和 `skills/`；平台差异放在 `adapters/`。适配说明不等于平台原生可执行配置，具体运行仍需目标 Runtime 提供对应工具和权限。
+
+### 13.6 校验
+在仓库根目录执行：
+
+```bash
+python scripts/validate_skills.py
+```
+
+该脚本检查 Skill Front Matter、名称与目录一致性、重复名称和 description。
+
+详细规范见：
+- `docs/LOW-TOKEN-ORCHESTRATION.md`
+- `docs/SKILL-GENERATION-RULES.md`

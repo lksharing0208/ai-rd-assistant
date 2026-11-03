@@ -1,0 +1,51 @@
+version: 1
+default_mode: low-token
+levels:
+  S0:
+    skills: []
+    workflow: direct
+  S1:
+    max_skills: 1
+    workflow: single
+  S2:
+    max_skills: 3
+    workflow: staged
+  S3:
+    max_skills: progressive
+    workflow: staged-quality-gates
+routes:
+  requirement:
+    primary: requirement-analysis
+    auxiliary: [project-analysis]
+  project_understanding:
+    primary: project-analysis
+    auxiliary: [architecture-design]
+  architecture:
+    primary: architecture-design
+    auxiliary: [project-analysis]
+  api:
+    primary: api-design
+    auxiliary: [database-design]
+  database:
+    primary: database-design
+    auxiliary: [api-design]
+  implementation:
+    primary: code-implementation
+    auxiliary: [project-analysis, test-design]
+  refactoring:
+    primary: code-refactoring
+    auxiliary: [project-analysis, test-design]
+  review:
+    primary: code-review
+    auxiliary: [project-analysis]
+  testing:
+    primary: test-design
+    auxiliary: [code-review]
+  delivery:
+    primary: project-delivery
+    auxiliary: [project-analysis, code-review]
+constraints:
+  primary_skill_count: 1
+  load_auxiliary_on_demand: true
+  no_duplicate_skill_execution: true
+  no_full_repository_preload: true

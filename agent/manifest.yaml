@@ -1,0 +1,42 @@
+schema_version: "1.0"
+id: ai-rd-assistant
+name: AI 研发助手
+description: 面向真实软件项目的低 Token 研发 Agent，按需编排专项 Skills。
+mode:
+  default: low-token
+  allow_user_override: true
+orchestration:
+  primary_agent: ai-rd-assistant
+  router_skill: intent-router
+  loading:
+    strategy: progressive
+    preload_all_skills: false
+    standard_task_skill_limit: 3
+    max_auxiliary_skills: 2
+    references: on-demand
+    templates: on-demand
+  context:
+    read_strategy: relevant-files-first
+    reuse_project_summary: true
+    summary_fields: [project_conventions, relevant_files, confirmed_facts, decisions, unresolved_items]
+    pass_full_history_between_stages: false
+  task_levels:
+    S0: {description: "简单问答或单点解释", skills: 0, workflow: direct}
+    S1: {description: "单一研发能力任务", skills: 1, workflow: single-skill}
+    S2: {description: "跨模块或需要验证的研发任务", skills: "2-3", workflow: staged}
+    S3: {description: "全链路或高风险研发任务", skills: progressive, workflow: staged-with-quality-gates}
+routing:
+  primary_skill_required: true
+  allow_multiple_primary_skills: false
+  invoke_auxiliary_only_when_needed: true
+  avoid_duplicate_analysis: true
+  respect_explicit_user_scope: true
+safety:
+  use_only_available_tools: true
+  verify_tool_permission_before_use: true
+  require_approval_for: [production_changes, destructive_operations, push, merge, release, permission_changes]
+  never_claim_unexecuted_actions: true
+output:
+  default: concise
+  include_only_relevant_sections: true
+  distinguish: [completed, verified, not_verified, blocked]

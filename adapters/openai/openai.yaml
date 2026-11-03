@@ -1,1 +1,29 @@
-
+format: agent-adapter/v1
+provider: openai
+agent:
+  name: ai-rd-assistant
+  instructions_source: ../../agent/instructions.md
+  manifest_source: ../../agent/manifest.yaml
+  orchestration:
+    mode: low-token
+    router_skill: intent-router
+    loading: progressive
+    standard_max_skills: 3
+    max_auxiliary_skills: 2
+runtime_mapping:
+  agent:
+    instructions: agent.instructions
+    model: runtime-selected
+    tools: runtime-registered
+    handoffs: workflow-defined
+    output_schema: optional
+  skills:
+    source: skills/*/SKILL.md
+    load: on-demand
+  tools:
+    source: runtime-tool-registry
+    permission_enforcement: runtime-policy
+notes:
+  - 本文件是统一 Agent Spec 到 OpenAI Runtime 的映射说明，不是 OpenAI Agents SDK 原生 JSON/YAML 配置。
+  - 实际 SDK 对象、Tool 定义和 Handoff 由运行时代码生成。
+  - 不假设每种模型或 Runtime 都支持相同工具能力。
